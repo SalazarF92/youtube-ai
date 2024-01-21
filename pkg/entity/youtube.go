@@ -12,6 +12,7 @@ type youtube interface {
 	GetChannelByHandle(handle string) (*yt.SearchResult, error)
 	GetUploadsPlaylistId(channelId string) (string, error)
 	GetVideosByChannelId(channelId string) ([]*yt.PlaylistItem, error)
+	GetCommentsByVideoId(videoId string) ([]*yt.CommentThread, error)
 }
 
 type Youtube struct {
@@ -69,10 +70,8 @@ func (y *Youtube) GetVideosByChannelId(channelId string) ([]*yt.PlaylistItem, er
 		return nil, err
 	}
 
-	fmt.Println(uploadsPlaylistId)
-
 	// call := y.Youtube.Search.List([]string{"snippet"}).Type("video").MaxResults(10).ChannelId(channelId).Order("date")
-	call := y.Youtube.PlaylistItems.List([]string{"snippet"}).PlaylistId(uploadsPlaylistId).MaxResults(50)
+	call := y.Youtube.PlaylistItems.List([]string{"snippet", "contentDetails"}).PlaylistId(uploadsPlaylistId).MaxResults(1)
 
 	response, err := call.Do()
 	if err != nil {
@@ -82,6 +81,13 @@ func (y *Youtube) GetVideosByChannelId(channelId string) ([]*yt.PlaylistItem, er
 	return response.Items, nil
 }
 
-// func (y *Youtube) GetVideos(channelId string) ([]string, error) {
-// 	return nil, nil
-// }
+func (y *Youtube) GetCommentsByVideoId(videoId string) ([]*yt.CommentThread, error) {
+	call := y.Youtube.CommentThreads.List([]string{"snippet"}).VideoId(videoId).MaxResults(50)
+
+	response, err := call.Do()
+	if err != nil {
+		return nil, err
+	}
+
+	return response.Items, nil
+}

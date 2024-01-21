@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	_ "github.com/joho/godotenv/autoload"
 	openai "github.com/sashabaranov/go-openai"
 )
 

@@ -89,12 +89,20 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(channelId)
-
 	videoList, err := ytService.GetVideosByChannelId(channelId.Id.ChannelId)
 
 	for _, video := range videoList {
-		fmt.Println(video.Snippet.Title)
+		fmt.Println(video.ContentDetails.VideoId)
+
+		videoComments, err := ytService.GetCommentsByVideoId(video.ContentDetails.VideoId)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, comment := range videoComments {
+			fmt.Println(comment.Snippet.TopLevelComment.Snippet.TextDisplay)
+		}
+
 	}
 
 	// r := gin.Default()
