@@ -1,2 +1,4 @@
 .env
 youtube.json
+
+./postgres_data
