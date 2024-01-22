@@ -4,16 +4,15 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 )
 
-func ConnectToDB() *sql.DB {
-
-	db_host := os.Getenv("DB_HOST")
-	db_port := os.Getenv("DB_PORT")
-	db_user := os.Getenv("DB_USER")
-	db_password := os.Getenv("DB_PASSWORD")
-	db_name := os.Getenv("DB_NAME")
+func ConnectToDB(
+	db_host string,
+	db_port string,
+	db_user string,
+	db_password string,
+	db_name string,
+) *sql.DB {
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		db_host, db_port, db_user, db_password, db_name)
@@ -22,6 +21,8 @@ func ConnectToDB() *sql.DB {
 	if err != nil {
 		log.Fatalf("Erro ao conectar ao banco de dados: %v", err)
 	}
+
+	fmt.Println(psqlInfo)
 
 	err = db.Ping()
 	if err != nil {

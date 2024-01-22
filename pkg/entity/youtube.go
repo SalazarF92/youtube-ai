@@ -71,7 +71,7 @@ func (y *Youtube) GetVideosByChannelId(channelId string) ([]*yt.PlaylistItem, er
 	}
 
 	// call := y.Youtube.Search.List([]string{"snippet"}).Type("video").MaxResults(10).ChannelId(channelId).Order("date")
-	call := y.Youtube.PlaylistItems.List([]string{"snippet", "contentDetails"}).PlaylistId(uploadsPlaylistId).MaxResults(1)
+	call := y.Youtube.PlaylistItems.List([]string{"snippet", "contentDetails"}).PlaylistId(uploadsPlaylistId).MaxResults(5)
 
 	response, err := call.Do()
 	if err != nil {
@@ -82,7 +82,7 @@ func (y *Youtube) GetVideosByChannelId(channelId string) ([]*yt.PlaylistItem, er
 }
 
 func (y *Youtube) GetCommentsByVideoId(videoId string) ([]*yt.CommentThread, error) {
-	call := y.Youtube.CommentThreads.List([]string{"snippet"}).VideoId(videoId).MaxResults(50)
+	call := y.Youtube.CommentThreads.List([]string{"snippet"}).VideoId(videoId).MaxResults(35)
 
 	response, err := call.Do()
 	if err != nil {
