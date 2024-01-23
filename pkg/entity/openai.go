@@ -29,18 +29,23 @@ func NewGPT(openai *opn.Client) *OpenAi {
 }
 
 func (openai *OpenAi) ChatCompletion(prompt string, videoContent string, thumb string) string {
-	//PAREI AQUI: TROQUEI PARA MULTICONTENT, CONTINUAR AGORA PARA GERAR O PROMPT E FAZER A ANALISE DO CONTEUDO
+	concatPrompt := fmt.Sprintf("%s %s", prompt, videoContent)
+
+	fmt.Println(concatPrompt)
+	fmt.Println(thumb)
+
 	response, err := openai.OpenAi.CreateChatCompletion(
 		context.Background(),
 		opn.ChatCompletionRequest{
 			Model: opn.GPT4,
 			Messages: []opn.ChatCompletionMessage{
 				{
-					Role:    opn.ChatMessageRoleUser,
-					Content: prompt,
+					Role: opn.ChatMessageRoleUser,
+					// Content: "diga olá",
 					MultiContent: []opn.ChatMessagePart{
 						{
-							Text:     prompt,
+							Type:     opn.ChatMessagePartTypeText,
+							Text:     "Consegue analisar a imagem que forneci aqui?",
 							ImageURL: &opn.ChatMessageImageURL{URL: thumb},
 						},
 					},
@@ -48,6 +53,7 @@ func (openai *OpenAi) ChatCompletion(prompt string, videoContent string, thumb s
 			},
 		},
 	)
+
 	if err != nil {
 		fmt.Printf(err.Error())
 		return ""

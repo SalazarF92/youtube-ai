@@ -7,6 +7,7 @@ import (
 	"market-openai/config"
 	"market-openai/pkg/db"
 	"market-openai/pkg/entity"
+	"market-openai/storage"
 	"os"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -64,13 +65,19 @@ func main() {
 
 	var videoData VideoData
 
-	channelId, err := ytService.GetChannelByHandle("SuperSaladin")
+	channel, err := ytService.GetChannelByHandle("SuperSaladin")
 
 	if err != nil {
 		panic(err)
 	}
 
-	videoList, err := ytService.GetVideosByChannelId(channelId.Id.ChannelId)
+	videoList, err := ytService.GetVideosByChannelId(channel.Id.ChannelId)
+	channelName := channel.Snippet.Title
+	fmt.Println(channelName)
+
+	if err != nil {
+		fmt.Print(err)
+	}
 
 	for index, playlistItem := range videoList {
 
@@ -102,19 +109,19 @@ func main() {
 	// fmt.Println(videoData.title)
 	// fmt.Println("descrição", videoData.desc)
 	// fmt.Println(videoData.comments)
-
-	formatedVideoData := config.FormatPromptData(videoData.title, videoData.desc, videoData.comments)
+	videoNumber := 1 //aqui seria o index percorrido  do array para numerar os videos por canal para comparar a thumb
 
 	// fmt.Println(result)
 
-	// promptYoutubeAnalysis := `Considerando o canal ou canais a serem analisados
-	// com o vídeo ou vídeos através do título ou títulos, descrição ou descrições, e comentários abaixo,
-	// faça uma análise inteligente como um todo do conteúdo fornecido com uma sugestão de vídeo que eu poderia fazer com
-	// base nos dados gerados a partir do conteúdo fornecido. Além disso, estou fornecendo a thumb ou thumbs dos vídeos, na ordem respectivas aos títulos para me dar sugestões de como eu poderia`
+	promptTemplate := storage.PROMPTS["NO_IMAGE"]
+
+	fmt.Println(promptTemplate)
+
+	prompt := config.FormatPromptData(videoNumber, channelName, videoData.title, videoData.desc, videoData.comments)
 
 	opnStart := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
 	opnService := entity.NewGPT(opnStart)
-	res := opnService.ChatCompletion("Conte uma história em até 50 caracteres", formatedVideoData, videoData.thumb)
+	res := opnService.ChatCompletion(promptTemplate, prompt, videoData.thumb)
 	fmt.Println("azedou", res)
 
 	// r := gin.Default()
