@@ -91,3 +91,14 @@ func (y *Youtube) GetCommentsByVideoId(videoId string) ([]*yt.CommentThread, err
 
 	return response.Items, nil
 }
+
+func (y *Youtube) GetVideoById(videoId string) (*yt.Video, error) {
+	call := y.Youtube.Videos.List([]string{"snippet", "contentDetails"}).Id(videoId)
+
+	response, err := call.Do()
+	if err != nil {
+		return nil, err
+	}
+
+	return response.Items[0], nil
+}

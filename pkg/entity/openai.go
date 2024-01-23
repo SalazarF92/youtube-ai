@@ -28,7 +28,8 @@ func NewGPT(openai *opn.Client) *OpenAi {
 	}
 }
 
-func (openai *OpenAi) ChatCompletion(prompt string, videoContent VideoData) string {
+func (openai *OpenAi) ChatCompletion(prompt string, videoContent string, thumb string) string {
+	//PAREI AQUI: TROQUEI PARA MULTICONTENT, CONTINUAR AGORA PARA GERAR O PROMPT E FAZER A ANALISE DO CONTEUDO
 	response, err := openai.OpenAi.CreateChatCompletion(
 		context.Background(),
 		opn.ChatCompletionRequest{
@@ -37,6 +38,12 @@ func (openai *OpenAi) ChatCompletion(prompt string, videoContent VideoData) stri
 				{
 					Role:    opn.ChatMessageRoleUser,
 					Content: prompt,
+					MultiContent: []opn.ChatMessagePart{
+						{
+							Text:     prompt,
+							ImageURL: &opn.ChatMessageImageURL{URL: thumb},
+						},
+					},
 				},
 			},
 		},
