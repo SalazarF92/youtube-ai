@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -9,7 +8,7 @@ import (
 // 	comments []string
 // }
 
-func FormatPromptData(videoNumber int, channelName, title, description string, comments []string) string {
+func FormatPromptData(channelName, title, description string, comments []string) string {
 
 	if len(comments) == 0 {
 		return ""
@@ -27,9 +26,7 @@ func FormatPromptData(videoNumber int, channelName, title, description string, c
 		channelName = "channelName - " + channelName
 	}
 
-	video := fmt.Sprintf("video %d", videoNumber)
-
 	//fmt.Sprintf with video+ videoNumber
 
-	return "\n\n" + channelName + "\n" + video + "\n" + title + "\n" + description + "\n" + strings.Join(comments, "\n")
+	return "\n\n" + channelName + "\n\n" + title + "\n" + description + "\n\n" + "comments\n" + strings.Join(comments, "\n\n")
 }

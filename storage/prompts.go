@@ -14,4 +14,6 @@ var PROMPTS = map[string]string{
 	do conteúdo fornecido. Além disso, estou fornecendo a thumb ou thumbs dos vídeos; as imagens estão 
 	na ordem respectivas ao número do vídeo fornecido - abaixo do nome do canal. Avalie as imagens fornecidas e os seus elementos
 	para me dar sugestões de como eu poderia me basear para produção no tipo de conteúdo sugerido. Abaixo o conteúdo a ser analisado:`,
+
+	"TESTE": `Analise a thumb deste canal do Youtube elemento por elemento detalhadamente com sugestões de melhoria e sugestões de novos vídeos com base nessa thumb`,
 }
